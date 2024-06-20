@@ -15,21 +15,22 @@ class Vector2D:
     def __init__(self, magnitude, direction):
         self.magnitude = float(magnitude)
         self.x = cos(radians(direction))
-        self.x = 0.0 if self.x < EPSILON else self.x * self.magnitude
-        self.y = sin(radians(direction)) * magnitude
-        self.y = 0.0 if self.y < EPSILON else self.y * self.magnitude
-
+        self.x = 0.0 if abs(self.x) < EPSILON else self.x * self.magnitude
+        self.y = sin(radians(direction))
+        self.y = 0.0 if abs(self.y) < EPSILON else self.y * self.magnitude
         self.direction = float(direction)
+        print(f"Vector2D initialized with magnitude {self.magnitude}, direction {direction}\n"
+              f"X-Component: {self.x}, Y-Component: {self.y}")
 
     def __add__(self, other):
-        self.x += other.x
-        self.y += other.y
-        self.update_vector()
+        x = self.x + other.x
+        y = self.y + other.y
+        return create_from_components(x, y)
 
     def __sub__(self, other):
-        self.x -= other.x
-        self.y -= other.y
-        self.update_vector()
+        x = self.x - other.x
+        y = self.y - other.y
+        return create_from_components(x, y)
 
     def __repr__(self):
         return (f"Vector(Magnitude: {self.magnitude}, Direction: {self.direction}, "
@@ -98,7 +99,9 @@ def create_from_components(x: float, y: float) -> Vector2D:
     return vec
 
 
-v = Vector2D(1, 45)
-v_a = create_from_components(sqrt(2) / 2, sqrt(2) / 2)
-DEBUG = True
-print(f"Vectors v and v_a are equal: {v == v_a}")
+v = Vector2D(4.9, 31.5)
+v_1 = Vector2D(6.3, -60)
+v_2 = v_1 - v
+print(f"Subtracting vector {v} from vector {v_1}...")
+print(f"Got result: {v_2}")
+print(f"Per second (given vector time of 2 seconds), x: {v_2.x/2}, y: {v_2.y/2}")
